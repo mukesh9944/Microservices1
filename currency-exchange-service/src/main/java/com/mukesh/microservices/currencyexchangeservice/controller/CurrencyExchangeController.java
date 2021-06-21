@@ -1,5 +1,7 @@
 package com.mukesh.microservices.currencyexchangeservice.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.mukesh.microservices.currencyexchangeservice.bean.CurrencyExchange;
 import com.mukesh.microservices.currencyexchangeservice.bean.CurrencyExchangeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import java.math.BigDecimal;
 @RestController
 public class CurrencyExchangeController {
 
+    Logger log = LoggerFactory.getLogger(CurrencyExchangeController.class);
+
     @Autowired
     private Environment environment;
 
@@ -22,6 +26,9 @@ public class CurrencyExchangeController {
     @GetMapping("/currency-exchange/from/{from}/to/{to}")
     public CurrencyExchange retrieveExchangeValue(@PathVariable String from, @PathVariable String to) {
         //CurrencyExchange currencyExchange = new CurrencyExchange(1001L, from, to, BigDecimal.TEN);
+
+        log.info("retrieveExchangeValue called with {} to {}", from, to);
+
         CurrencyExchange currencyExchange = repository.findByFromAndTo(from, to);
         if(currencyExchange == null){
             throw new RuntimeException("Unable to find data for "+ from +" to "+to);
